@@ -1,8 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:ui_design1/ui/screens/main_bottom_nav_screen.dart';
 import 'package:ui_design1/ui/screens/register_screen.dart';
 
 import 'package:ui_design1/ui/widgets/screen_background.dart';
+
 
 import '../utils/assets_path.dart';
 import 'forgot_password_verify_email.dart';
@@ -98,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onTapSubmitButton(){
-
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>MainBottomNavScreen()), (predicate)=>false);
   }
   void _onTapSignUpButton() {
     Navigator.push(
