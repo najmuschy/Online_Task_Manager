@@ -6,7 +6,7 @@ class NetworkResponse {
   final bool isSuccess;
   final int statusCode;
   final Map<String, dynamic>? data;
-  final String? errorMessage;
+  final String errorMessage;
 
   NetworkResponse({
     required this.isSuccess,
@@ -43,7 +43,7 @@ class NetworkClient {
         );
       }
     } catch (e) {
-      _logger.e(e.toString());
+      postRequestLogger(url, -1, errorMessage: e.toString());
       return NetworkResponse(
         isSuccess: false,
         statusCode: -1,
@@ -79,9 +79,12 @@ class NetworkClient {
           data: decodedJson,
         );
       } else {
+        final decodedJson = jsonDecode(response.body);
+        String? errorMessage = decodedJson["data"] ;
         return NetworkResponse(
           isSuccess: false,
           statusCode: response.statusCode,
+          errorMessage: errorMessage ?? 'Something Went Wrong'
         );
       }
     } catch (e) {
@@ -101,13 +104,7 @@ class NetworkClient {
     );
   }
 
-  static void postRequestLogger(
-    String url,
-    int statusCode, {
-    Map<String, dynamic>? headers,
-    dynamic body,
-    String? errorMessage,
-  }) {
+  static void postRequestLogger(String url,int statusCode, {Map<String, dynamic>? headers,dynamic body, String? errorMessage,}) {
     if (errorMessage != null) {
       _logger.e(
         'Status Code : $statusCode \n'
