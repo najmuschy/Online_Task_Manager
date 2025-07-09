@@ -1,14 +1,19 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:ui_design1/data/service/network_client.dart';
+import 'package:ui_design1/data/utils/urls.dart';
 import 'package:ui_design1/ui/screens/forgot_password_verify_pin.dart';
 import 'package:ui_design1/ui/screens/login_screen.dart';
+import 'package:ui_design1/ui/widgets/scaffold_message.dart';
 
 import 'package:ui_design1/ui/widgets/screen_background.dart';
 
 import '../utils/assets_path.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({super.key});
+  final String email ;
+  final String otp ;
+  const ResetPasswordScreen({super.key, required this.email, required this.otp});
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -49,12 +54,33 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   keyboardType: TextInputType.emailAddress,
                   controller: _newPasswordTEController,
                   decoration: InputDecoration(hintText: 'Set Password'),
+                  validator:  (String? value){
+                    if((value?.isEmpty ?? true) || (value!.length<6)){
+                      return 'YOUR FINGERS GET CUT OFF? 6 CHARACTERS IS NOT ROCKET SCIENCE!' ;
+                    }
+
+                    else{
+                      return null ;
+                    }
+                  },
                 ),
                 SizedBox(height: 8),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   controller: _confirmNewPasswordTEController,
                   decoration: InputDecoration(hintText: 'Confirm Password'),
+                  validator: (String? value){
+                    if((value?.isEmpty ?? true) || (value!.length<6)){
+                      return 'YOUR FINGERS GET CUT OFF?? 6 CHARACTERS IS NOT ROCKET SCIENCE!' ;
+                    }
+                    else if(value!=_newPasswordTEController.text){
+                      return 'Make sure your passwords match doofus!' ;
+                    }
+                    else{
+                      return null ;
+                    }
+
+                  },
                 ),
 
                 SizedBox(height: 12),
@@ -94,8 +120,34 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       ),
     );
   }
+  Future<void> onResetPassword() async{
+    String email = widget.email;
+    String otp = widget.otp;
+    Map<String, dynamic> requestBody = {
+      "email":email,
+      "OTP": otp,
+      "password":_newPasswordTEController.text
+    };
+    NetworkResponse response = await NetworkClient.postRequest(url: Urls.resetPassword, body: requestBody) ;
+    if(response.isSuccess){
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+            (predicate) => false,
+      );
+      showScaffoldMessage(context, response.data!['data']);
+    }
+    else{
+      showScaffoldMessage(context, 'Something went wrong, please try again from the start') ;
+    }
+  }
+  void _onTapSubmitButton() {
 
-  void _onTapSubmitButton() {}
+    if(_formKey.currentState!.validate()){
+      onResetPassword();
+    }
+
+  }
   void _onTapSignInButton() {
     Navigator.pushAndRemoveUntil(
       context,

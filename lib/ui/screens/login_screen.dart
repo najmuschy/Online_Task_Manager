@@ -1,8 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:ui_design1/data/service/network_client.dart';
+import 'package:ui_design1/data/utils/urls.dart';
+import 'package:ui_design1/data/models/login_model.dart';
+import 'package:ui_design1/ui/controller/auth_controller.dart';
 import 'package:ui_design1/ui/screens/main_bottom_nav_screen.dart';
 import 'package:ui_design1/ui/screens/register_screen.dart';
-
+import 'package:email_validator/email_validator.dart';
+import 'package:ui_design1/ui/widgets/centered_circular_progress_indicator.dart';
+import 'package:ui_design1/ui/widgets/scaffold_message.dart';
 import 'package:ui_design1/ui/widgets/screen_background.dart';
 
 
@@ -21,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordTEController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool loginUserProgress = false ;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +51,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailTEController,
                   decoration: InputDecoration(hintText: 'Email'),
+                  validator: (String? value){
+                    String email = value?.trim() ?? "" ;
+                    if(EmailValidator.validate(email)==false){
+                      return 'Enter a valid email bozo' ;
+                    }
+                    return null ;
+                  },
                 ),
                 SizedBox(height: 6),
                 TextFormField(
@@ -51,11 +65,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.visiblePassword,
                   controller: _passwordTEController,
                   decoration: InputDecoration(hintText: 'Password'),
+                  validator: (String? value){
+                    if((value?.isEmpty ?? true) || (value!.length<6)){
+                      return 'YOUR FINGERS GET CUT OFF?' ;
+                    }
+                    else{
+                      return null ;
+                    }
+                  },
                 ),
                 SizedBox(height: 12),
-                ElevatedButton(
-                  onPressed: _onTapSubmitButton,
-                  child: Icon(Icons.arrow_forward),
+                Visibility(
+                  visible: loginUserProgress == false,
+                  replacement: CenteredCircularProgressIndicator(),
+                  child: ElevatedButton(
+                    onPressed: _onTapSubmitButton,
+                    child: Icon(Icons.arrow_forward),
+                  ),
                 ),
                 SizedBox(height: 32),
                 Center(
@@ -99,8 +125,34 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _onTapSubmitButton(){
+  Future<void> loginUser() async {
+    loginUserProgress =  true ;
+    setState(() {});
+
+    Map<String, dynamic> body = {
+      "email" : _emailTEController.text ,
+      "password" : _passwordTEController.text ,
+    };
+    NetworkResponse response = await NetworkClient.postRequest(url : Urls.loginUrl, body: body);
+
+    if(response.isSuccess){
+      LoginModel loginModel = LoginModel.fromJson(response.data!);
+      //Save token to local disk
+      AuthController.saveUserInfo(loginModel.token, loginModel.userModel) ;
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>MainBottomNavScreen()), (predicate)=>false);
+    }
+    else{
+      showScaffoldMessage(context, response.errorMessage, true) ;
+    }
+    loginUserProgress =  false ;
+    setState(() {});
+}
+
+  void _onTapSubmitButton(){
+    if(_formKey.currentState!.validate()){
+      loginUser();
+    }
+
   }
   void _onTapSignUpButton() {
     Navigator.push(

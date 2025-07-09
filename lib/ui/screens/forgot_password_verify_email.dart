@@ -1,7 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:ui_design1/data/service/network_client.dart';
+import 'package:ui_design1/data/utils/urls.dart';
 import 'package:ui_design1/ui/screens/forgot_password_verify_pin.dart';
-
+import 'package:email_validator/email_validator.dart';
+import 'package:ui_design1/ui/widgets/scaffold_message.dart';
 import 'package:ui_design1/ui/widgets/screen_background.dart';
 
 import '../utils/assets_path.dart';
@@ -46,6 +49,13 @@ class _ForgotPasswordVerifyEmailState extends State<ForgotPasswordVerifyEmail> {
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailTEController,
                   decoration: InputDecoration(hintText: 'Email'),
+                  validator: (String? value){
+                    String email = value?.trim() ?? '' ;
+                    if(EmailValidator.validate(email)=='false'){
+                      return 'WAKE UP DELULU' ;
+                    }
+                    return null ;
+                  },
                 ),
 
 
@@ -87,8 +97,25 @@ class _ForgotPasswordVerifyEmailState extends State<ForgotPasswordVerifyEmail> {
     );
   }
 
-  void _onTapSubmitButton(){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPasswordVerifyPin())) ;
+  Future<void> onVerifyEmail() async{
+    NetworkResponse response = await NetworkClient.getRequest(url: Urls.forgotPasswordEmailVerifyUrl(_emailTEController.text)) ;
+    print(response.data) ;
+
+    if(response.isSuccess){
+      showScaffoldMessage(context, response.data!["data"]) ;
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPasswordVerifyPin(email : _emailTEController.text))) ;
+    }
+    else{
+      showScaffoldMessage(context, response.data!["data"], true);
+    }
+  }
+
+  void _onTapSubmitButton() async{
+
+    if(_formKey.currentState!.validate()){
+      onVerifyEmail();
+    }
+
   }
   void _onTapSignInButton() {
    Navigator.pop(context) ;

@@ -2,7 +2,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart'
     show AnimationType, PinCodeFieldShape, PinCodeTextField, PinTheme;
+import 'package:ui_design1/data/service/network_client.dart';
+import 'package:ui_design1/data/utils/urls.dart';
 import 'package:ui_design1/ui/screens/reset_password.dart';
+import 'package:ui_design1/ui/widgets/scaffold_message.dart';
 
 import 'package:ui_design1/ui/widgets/screen_background.dart';
 
@@ -10,7 +13,8 @@ import '../utils/assets_path.dart';
 import 'login_screen.dart';
 
 class ForgotPasswordVerifyPin extends StatefulWidget {
-  const ForgotPasswordVerifyPin({super.key});
+  final String email ;
+  const ForgotPasswordVerifyPin({super.key, required this.email} );
 
   @override
   State<ForgotPasswordVerifyPin> createState() =>
@@ -21,6 +25,7 @@ class _ForgotPasswordVerifyPinState extends State<ForgotPasswordVerifyPin> {
   final TextEditingController _pinCodeTEController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -110,11 +115,21 @@ class _ForgotPasswordVerifyPinState extends State<ForgotPasswordVerifyPin> {
     );
   }
 
-  void _onTapSubmitButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
-    );
+  void _onTapSubmitButton() async{
+    String email = widget.email ;
+
+    NetworkResponse response = await NetworkClient.getRequest(url: Urls.forgotPasswordEmailVerifyPin (email, _pinCodeTEController.text)) ;
+    if(response.isSuccess){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ResetPasswordScreen(email: email, otp : _pinCodeTEController.text )),
+      );
+      showScaffoldMessage(context, '${response.data!['data']} Enter a 6 digit password') ;
+    }
+    else{
+      showScaffoldMessage(context, response.data!['data']);
+    }
+
   }
 
   void _onTapSignInButton() {

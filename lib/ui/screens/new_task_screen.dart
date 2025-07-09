@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import '../widgets/summary_card.dart';
 import '../widgets/task_card.dart';
 import 'add_task_screen.dart';
@@ -43,13 +44,16 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   Widget buildSummarySection() {
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: Row(
-        children: [
-          SummaryCard(count: 12, status: 'New'),
-          SummaryCard(count: 12, status: 'Cancelled'),
-          SummaryCard(count: 12, status: 'Progress'),
-          SummaryCard(count: 12, status: 'Completed'),
-        ],
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            SummaryCard(count: 12, status: 'New'),
+            SummaryCard(count: 12, status: 'Cancelled'),
+            SummaryCard(count: 12, status: 'Progress'),
+            SummaryCard(count: 12, status: 'Completed'),
+          ],
+        ),
       ),
     );
   }

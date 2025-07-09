@@ -8,6 +8,7 @@ import 'package:ui_design1/ui/widgets/scaffold_message.dart';
 import 'package:ui_design1/ui/widgets/screen_background.dart';
 import 'package:email_validator/email_validator.dart';
 import '../utils/assets_path.dart';
+import '../widgets/centered_circular_progress_indicator.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -63,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     decoration: InputDecoration(hintText: 'First Name'),
                     validator: (String? value) {
                       if (value?.trim().isEmpty ?? true) {
-                        return 'Enter a value';
+                        return 'Only Arya Stark has no names. Put yours if you wanna register';
                       }
                       return null;
                     },
@@ -76,7 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     validator: (String? value) {
                       if (value?.trim().isEmpty ?? true) {
-                        return 'Enter a last name';
+                        return 'No last name?? Really?? Make one up';
                       }
                       return null;
                     },
@@ -104,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     decoration: InputDecoration(hintText: 'Password'),
 
                     validator: (String? value) {
-                      if ((value?.trim().isEmpty ?? true)|| (value!.length < 6)) {
+                      if ((value?.isEmpty ?? true)|| (value!.length < 6)) {
                         return 'Enter a  valid password';
                       }
                       return null;
@@ -114,9 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Visibility(
 
                     visible: registrationInProgress==false ,
-                    replacement: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    replacement: CenteredCircularProgressIndicator(),
                     child: ElevatedButton(
                       onPressed: _onTapSubmitButton,
                       child: Icon(Icons.arrow_forward),
@@ -176,16 +175,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     };
     NetworkResponse response = await NetworkClient.postRequest(url: Urls.registerUrl, body: requestBody) ;
-    registrationInProgress = false ;
-    setState(() {
 
-    });
     if(response.isSuccess){
       showScaffoldMessage(context, 'User Registered Successfully') ;
+      controllerClear() ;
     }
     else{
       showScaffoldMessage(context, response.errorMessage, true) ;
     }
+    registrationInProgress = false ;
+    setState(() {
+
+    });
   }
 
 
@@ -201,7 +202,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _onTapSignInButton() {
     Navigator.pop(context);
   }
-
+  void controllerClear() {
+    _emailTEController.clear();
+    _firstNameTEController.clear();
+    _lastNameTEController.clear();
+    _mobileTEController.clear();
+    _passwordTEController.clear();
+    super.dispose();
+  }
   @override
   void dispose() {
     _emailTEController.dispose();

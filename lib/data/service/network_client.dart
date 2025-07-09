@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart';
+import 'package:ui_design1/app.dart';
+import 'package:ui_design1/ui/controller/auth_controller.dart';
+import 'package:ui_design1/ui/screens/login_screen.dart';
 
 class NetworkResponse {
   final bool isSuccess;
@@ -19,10 +23,11 @@ class NetworkResponse {
 class NetworkClient {
   static final Logger _logger = Logger();
   static Future<NetworkResponse> getRequest({required String url}) async {
+    final Map<String, String> headers = {'token' : AuthController.token ?? ''};
     try {
       Uri uri = Uri.parse(url);
-      preRequestLogger(url);
-      Response response = await get(uri);
+      preRequestLogger(url, headers);
+      Response response = await get(uri, headers: headers);
       postRequestLogger(
         url,
         response.statusCode,
@@ -36,10 +41,21 @@ class NetworkClient {
           statusCode: response.statusCode,
           data: decodedJson,
         );
-      } else {
+      }
+      else if(response.statusCode==401){
+        _moveToLoginScreen();
         return NetworkResponse(
           isSuccess: false,
           statusCode: response.statusCode,
+
+        );
+      }
+      else {
+        final decodedJson = jsonDecode(response.body);
+        return NetworkResponse(
+          isSuccess: false,
+          statusCode: response.statusCode,
+          data:  decodedJson,
         );
       }
     } catch (e) {
@@ -58,10 +74,12 @@ class NetworkClient {
   }) async {
     try {
       Uri uri = Uri.parse(url);
-      preRequestLogger(url, body: body);
+      final Map<String, String> headers = {'Content-type': 'Application/json' , 'token' : AuthController.token ?? ''};
+
+      preRequestLogger(url,headers, body: body);
       Response response = await post(
         uri,
-        headers: {'Content-type': 'Application/json'},
+        headers: headers,
         body: jsonEncode(body),
       );
       postRequestLogger(
@@ -78,7 +96,16 @@ class NetworkClient {
           statusCode: response.statusCode,
           data: decodedJson,
         );
-      } else {
+      }
+      else if(response.statusCode==401){
+        _moveToLoginScreen();
+        return NetworkResponse(
+            isSuccess: false,
+            statusCode: response.statusCode,
+
+        );
+      }
+      else {
         final decodedJson = jsonDecode(response.body);
         String? errorMessage = decodedJson["data"] ;
         return NetworkResponse(
@@ -97,10 +124,11 @@ class NetworkClient {
     }
   }
 
-  static void preRequestLogger(String url, {Map<String, dynamic>? body}) {
+  static void preRequestLogger(String url,  Map<String,String> header, {Map<String, dynamic>? body}) {
     _logger.i(
       'URL : $url'
-      'body : $body ',
+      'body : $body '
+      'header : $header'
     );
   }
 
@@ -118,4 +146,10 @@ class NetworkClient {
       );
     }
   }
+
+  static void _moveToLoginScreen() async{
+    await AuthController.clearUserInfo();
+    Navigator.pushAndRemoveUntil(TaskManagerApp.navigatorKey.currentContext!, MaterialPageRoute(builder: (context)=>LoginScreen()), (predicate)=>false) ;
+  }
 }
+
