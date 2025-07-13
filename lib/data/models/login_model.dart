@@ -1,14 +1,13 @@
-import 'package:ui_design1/data/models/user_model.dart';
+import 'package:ostad_flutter_batch_nine/data/models/user_model.dart';
 
-class LoginModel{
-  late final status;
-  late final token;
-  late UserModel userModel ;
+class LoginModel {
+  late final String status;
+  late final String token;
+  late final UserModel userModel;
 
-  LoginModel.fromJson(Map<String,dynamic> jsonData){
-    token = jsonData['token']?? '';
-    status = jsonData['status']?? '';
-    userModel = UserModel.fromJson(jsonData['data']?? {});
+  LoginModel.fromJson(Map<String, dynamic> jsonData) {
+    status = jsonData['status'] ?? '';
+    userModel = UserModel.fromJson(jsonData['data'] ?? {});
+    token = jsonData['token'] ?? '';
   }
-
 }

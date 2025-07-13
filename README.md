@@ -1,6 +1,6 @@
-# ui_design1
+# ostad_flutter_batch_nine
 
-A new Flutter project.
+Flutter project for ostad batch nine live class
 
 ## Getting Started
 

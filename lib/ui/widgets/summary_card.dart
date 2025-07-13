@@ -2,24 +2,28 @@ import 'package:flutter/material.dart';
 
 class SummaryCard extends StatelessWidget {
   const SummaryCard({
-    super.key, required this.count, required this.status,
+    super.key,
+    required this.title,
+    required this.count,
   });
-  final int count ;
-  final String status;
+
+  final String title;
+  final int count;
+
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 0,
       color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Column(
           children: [
-            Text(count.toString(), style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 26,
-            ),),
-            Text(status)
-
+            Text(
+              '$count',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+            Text(title),
           ],
         ),
       ),

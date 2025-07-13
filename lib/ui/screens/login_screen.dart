@@ -1,19 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ui_design1/data/service/network_client.dart';
-import 'package:ui_design1/data/utils/urls.dart';
-import 'package:ui_design1/data/models/login_model.dart';
-import 'package:ui_design1/ui/controller/auth_controller.dart';
-import 'package:ui_design1/ui/screens/main_bottom_nav_screen.dart';
-import 'package:ui_design1/ui/screens/register_screen.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:ui_design1/ui/widgets/centered_circular_progress_indicator.dart';
-import 'package:ui_design1/ui/widgets/scaffold_message.dart';
-import 'package:ui_design1/ui/widgets/screen_background.dart';
-
-
-import '../utils/assets_path.dart';
-import 'forgot_password_verify_email.dart';
+import 'package:ostad_flutter_batch_nine/data/models/login_model.dart';
+import 'package:ostad_flutter_batch_nine/data/service/network_client.dart';
+import 'package:ostad_flutter_batch_nine/data/utils/urls.dart';
+import 'package:ostad_flutter_batch_nine/ui/controllers/auth_controller.dart';
+import 'package:ostad_flutter_batch_nine/ui/screens/forgot_password_verify_email_screen.dart';
+import 'package:ostad_flutter_batch_nine/ui/screens/main_bottom_nav_screen.dart';
+import 'package:ostad_flutter_batch_nine/ui/screens/register_screen.dart';
+import 'package:ostad_flutter_batch_nine/ui/widgets/centered_circular_progress_indicator.dart';
+import 'package:ostad_flutter_batch_nine/ui/widgets/screen_background.dart';
+import 'package:ostad_flutter_batch_nine/ui/widgets/snack_bar_message.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,98 +21,84 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool loginUserProgress = false ;
+  bool _loginInProgress = false;
 
+  // TODO: Validate form(Email & password)
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ScreenBackground(
         child: Padding(
-          padding: EdgeInsets.all(32.0),
+          padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 80),
+                const SizedBox(height: 80),
                 Text(
                   'Get Started With',
-                  style: Theme.of(context).textTheme.displaySmall,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 24),
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailTEController,
-                  decoration: InputDecoration(hintText: 'Email'),
-                  validator: (String? value){
-                    String email = value?.trim() ?? "" ;
-                    if(EmailValidator.validate(email)==false){
-                      return 'Enter a valid email bozo' ;
-                    }
-                    return null ;
-                  },
-                ),
-                SizedBox(height: 6),
-                TextFormField(
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.visiblePassword,
-                  controller: _passwordTEController,
-                  decoration: InputDecoration(hintText: 'Password'),
-                  validator: (String? value){
-                    if((value?.isEmpty ?? true) || (value!.length<6)){
-                      return 'YOUR FINGERS GET CUT OFF?' ;
-                    }
-                    else{
-                      return null ;
-                    }
-                  },
-                ),
-                SizedBox(height: 12),
-                Visibility(
-                  visible: loginUserProgress == false,
-                  replacement: CenteredCircularProgressIndicator(),
-                  child: ElevatedButton(
-                    onPressed: _onTapSubmitButton,
-                    child: Icon(Icons.arrow_forward),
+                  decoration: const InputDecoration(
+                    hintText: 'Email',
                   ),
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _passwordTEController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    hintText: 'Password',
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Visibility(
+                  visible: _loginInProgress == false,
+                  replacement: const CenteredCircularProgressIndicator(),
+                  child: ElevatedButton(
+                    onPressed: _onTapSignInButton,
+                    child: const Icon(Icons.arrow_circle_right_outlined),
+                  ),
+                ),
+                const SizedBox(height: 32),
                 Center(
                   child: Column(
                     children: [
                       TextButton(
                         onPressed: _onTapForgotPasswordButton,
-                        child: Text('Forgot Password?'),
+                        child: const Text('Forgot Password?'),
                       ),
-                      SizedBox(height: 8),
                       RichText(
                         text: TextSpan(
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black54,
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
                           ),
                           children: [
-                            TextSpan(text: "Don't have an account?"),
+                            const TextSpan(text: "Don't have account? "),
                             TextSpan(
-                              text: "Sign Up",
-                              style: TextStyle(
+                              text: 'Sign Up',
+                              style: const TextStyle(
                                 color: Colors.green,
                                 fontWeight: FontWeight.bold,
                               ),
-                              recognizer:
-                                  TapGestureRecognizer()
-                                    ..onTap = _onTapSignUpButton,
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = _onTapSignUpButton,
                             ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                ),
+                )
               ],
             ),
           ),
@@ -125,48 +107,61 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> loginUser() async {
-    loginUserProgress =  true ;
-    setState(() {});
-
-    Map<String, dynamic> body = {
-      "email" : _emailTEController.text ,
-      "password" : _passwordTEController.text ,
-    };
-    NetworkResponse response = await NetworkClient.postRequest(url : Urls.loginUrl, body: body);
-
-    if(response.isSuccess){
-      LoginModel loginModel = LoginModel.fromJson(response.data!);
-      //Save token to local disk
-      AuthController.saveUserInfo(loginModel.token, loginModel.userModel) ;
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>MainBottomNavScreen()), (predicate)=>false);
+  void _onTapSignInButton() {
+    if (_formKey.currentState!.validate()) {
+      _login();
     }
-    else{
-      showScaffoldMessage(context, response.errorMessage, true) ;
-    }
-    loginUserProgress =  false ;
-    setState(() {});
-}
-
-  void _onTapSubmitButton(){
-    if(_formKey.currentState!.validate()){
-      loginUser();
-    }
-
   }
-  void _onTapSignUpButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const RegisterScreen()),
+
+  Future<void> _login() async {
+    _loginInProgress = true;
+    setState(() {});
+    Map<String, dynamic> requestBody = {
+      "email": _emailTEController.text.trim(),
+      "password": _passwordTEController.text
+    };
+    NetworkResponse response = await NetworkClient.postRequest(
+      url: Urls.loginUrl,
+      body: requestBody,
     );
+    _loginInProgress = false;
+    setState(() {});
+    if (response.isSuccess) {
+      LoginModel loginModel = LoginModel.fromJson(response.data!);
+      AuthController.saveUserInformation(loginModel.token, loginModel.userModel);
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainBottomNavScreen(),
+        ),
+            (predicate) => false,
+      );
+    } else {
+      showSnackBarMessage(context, response.errorMessage, true);
+    }
   }
 
   void _onTapForgotPasswordButton() {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>const ForgotPasswordVerifyEmail()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ForgotPasswordVerifyEmailScreen(),
+      ),
+    );
   }
+
+  void _onTapSignUpButton() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const RegisterScreen(),
+      ),
+    );
+  }
+
   @override
   void dispose() {
-    // TODO: implement dispose
     _emailTEController.dispose();
     _passwordTEController.dispose();
     super.dispose();
