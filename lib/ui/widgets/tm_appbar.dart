@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:ui_design1/ui/controller/auth_controller.dart';
-import 'package:ui_design1/ui/screens/login_screen.dart';
-import 'package:ui_design1/ui/screens/new_task_screen.dart';
-import 'package:ui_design1/ui/screens/update_profile_screen.dart';
+
+
+import '../controller/auth_controller.dart';
+import '../screens/login_screen.dart';
+import '../screens/update_profile_screen.dart';
 
 class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
   const TMAppBar({super.key, this.fromUpdateProfileScreen});
@@ -37,7 +38,7 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AuthController.userModel?.fullName ?? '',
+                  AuthController.userModel?.fulName ?? '',
                   style: theme.bodyLarge?.copyWith(color: Colors.white),
                 ),
 
@@ -53,7 +54,7 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           onPressed: () => _onTapLogoutButton(context),
-          icon: Icon(Icons.logout),
+          icon: const Icon(Icons.logout),
         ),
       ],
     );
@@ -62,7 +63,7 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
   _onTapUpdateProfile(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => UpdateProfileScreen()),
+      MaterialPageRoute(builder: (context) => const UpdateProfileScreen()),
     );
   }
    bool showImageOrNot(String? photo){
@@ -80,5 +81,5 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

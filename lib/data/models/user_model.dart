@@ -1,66 +1,86 @@
-class UserModel{
-  late final id;
-  late final firstName;
-  late final lastName;
-  late final email;
-  late final mobile;
-  late final password;
-  late final photo;
+// class UserModel {
+//   late final String id;
+//   late final String email;
+//   late final String firstName;
+//   late final String lastName;
+//   late final String mobile;
+//   late final String createdDate;
+//
+//   UserModel();
+//
+//   // named constructor
+//   UserModel.fromJson(Map<String, dynamic> jsonData) {
+//     id = jsonData['_id'];
+//     email = jsonData['email'];
+//     firstName = jsonData['firstName'];
+//     lastName = jsonData['lastName'];
+//     mobile = jsonData['mobile'];
+//     createdDate = jsonData['createdDate'];
+//   }
+// }
 
-  UserModel.fromJson(Map<String,dynamic> jsonData){
-    id = jsonData['_id'] ;
-    firstName = jsonData['firstName'] ;
-    lastName = jsonData['lastName'] ;
-    email = jsonData['email'] ;
-    mobile = jsonData['mobile'] ;
-    password = jsonData['password'] ;
-    photo = jsonData['photo'] ;
+class UserModel {
+  late final String id;
+  late final String email;
+  late final String firstName;
+  late final String lastName;
+  late final String mobile;
+  late final String createdDate;
+  late final String photo;
+
+  // named constructor
+  UserModel.fromJson(Map<String, dynamic> jsonData) {
+    id = jsonData['_id'] ?? '';
+    email = jsonData['email'] ?? '';
+    firstName = jsonData['firstName'] ?? '';
+    lastName = jsonData['lastName'] ?? '';
+    mobile = jsonData['mobile'] ?? '';
+    createdDate = jsonData['createdDate'] ?? '';
+    photo = jsonData['photo'] ?? '';
   }
-  Map<String, dynamic> toJson(){
+
+  Map<String, dynamic> toJson() {
     return {
-      '_id' : id,
-      'email' : email,
-      'firstName' : firstName,
-      'lastName' : lastName,
-      'mobile' : mobile,
-      'password' : password,
-      'photo' : photo,
+      '_id': id,
+      'email': email,
+      'firstName': firstName,
+      'lastName': lastName,
+      'mobile': mobile,
+      'createdDate': createdDate,
     };
   }
-  String get fullName{
-    return '$firstName $lastName' ;
+
+  String get fulName {
+    return '$firstName $lastName';
   }
 }
 
-// class UserModel{
+// class UserModel {
 //   final String id;
+//   final String email;
 //   final String firstName;
 //   final String lastName;
-//   final String email;
 //   final String mobile;
-//   final String password;
 //   final String createdDate;
 //
-//   UserModel( {
+//   UserModel({
 //     required this.id,
+//     required this.email,
 //     required this.firstName,
 //     required this.lastName,
-//     required this.email,
 //     required this.mobile,
-//     required this.password,
 //     required this.createdDate,
-// });
+//   });
 //
-//   factory UserModel.fromJson(Map<String, dynamic> jsonData){
+//   // named constructor
+//   // factory
+//   factory UserModel.fromJson(Map<String, dynamic> jsonData) {
 //     return UserModel(id: jsonData['_id'] ?? '',
+//         email: jsonData['email'] ?? '',
 //         firstName: jsonData['firstName'] ?? '',
 //         lastName: jsonData['lastName'] ?? '',
-//         email: jsonData['email'] ?? '',
 //         mobile: jsonData['mobile'] ?? '',
-//         password: jsonData['password'] ?? '',
 //         createdDate: jsonData['createdDate'] ?? '',
 //     );
-//
 //   }
-//
 // }

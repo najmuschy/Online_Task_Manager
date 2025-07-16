@@ -1,15 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ui_design1/data/service/network_client.dart';
-import 'package:ui_design1/data/utils/urls.dart';
-import 'package:ui_design1/ui/screens/main_bottom_nav_screen.dart';
-import 'package:ui_design1/ui/screens/register_screen.dart';
-import 'package:ui_design1/ui/widgets/centered_circular_progress_indicator.dart';
-import 'package:ui_design1/ui/widgets/scaffold_message.dart';
 
-import 'package:ui_design1/ui/widgets/screen_background.dart';
 
+import '../../data/service/network_client.dart';
+import '../../data/utils/urls.dart';
 import '../utils/assets_path.dart';
+import '../widgets/centered_circular_progress_indicator.dart';
+import '../widgets/scaffold_message.dart';
+import '../widgets/screen_background.dart';
 import 'forgot_password_verify_email.dart';
 
 class AddTaskScreen extends StatefulWidget {
@@ -41,12 +39,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 80),
+                  const SizedBox(height: 80),
                   Text(
                     'Add Task',
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
                     textInputAction: TextInputAction.next,
                     controller: _taskNameTEController,
@@ -62,11 +60,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           
                     },
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   TextFormField(
                     maxLines: 10,
                     controller: _taskDescriptionTEController,
-                    decoration: InputDecoration(hintText: 'Description'),
+                    decoration: const InputDecoration(hintText: 'Description'),
                     validator: (String? value){
                       if(value?.isEmpty?? false){
                         return 'Enter description mi hermano' ;
@@ -79,13 +77,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     },
                   ),
           
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Visibility(
                     visible: _taskUpdateInProgress == false,
-                    replacement: CenteredCircularProgressIndicator(),
+                    replacement: const CenteredCircularProgressIndicator(),
                     child: ElevatedButton(
                       onPressed: _onTapSubmitButton,
-                      child: Icon(Icons.arrow_forward),
+                      child: const Icon(Icons.arrow_forward),
                     ),
                   ),
           
@@ -105,7 +103,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       "description": _taskDescriptionTEController.text,
       "status":"New"
     };
-    NetworkResponse response = await NetworkClient.postRequest(url: Urls.createTask, body: requestBody) ;
+    NetworkResponse response = await NetworkClient.postRequest(url: Urls.createTaskUrl, body: requestBody) ;
 
     if(response.isSuccess){
       clearController() ;

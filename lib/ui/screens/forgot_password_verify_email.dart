@@ -1,13 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ui_design1/data/service/network_client.dart';
-import 'package:ui_design1/data/utils/urls.dart';
-import 'package:ui_design1/ui/screens/forgot_password_verify_pin.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:ui_design1/ui/widgets/scaffold_message.dart';
-import 'package:ui_design1/ui/widgets/screen_background.dart';
 
-import '../utils/assets_path.dart';
+import 'package:email_validator/email_validator.dart';
+
+
+import '../../data/service/network_client.dart';
+import '../../data/utils/urls.dart';
+import '../widgets/scaffold_message.dart';
+import '../widgets/screen_background.dart';
+import 'forgot_password_verify_pin.dart';
 
 class ForgotPasswordVerifyEmail extends StatefulWidget {
   const ForgotPasswordVerifyEmail({super.key});
@@ -27,28 +28,28 @@ class _ForgotPasswordVerifyEmailState extends State<ForgotPasswordVerifyEmail> {
     return Scaffold(
       body: ScreenBackground(
         child: Padding(
-          padding: EdgeInsets.all(32.0),
+          padding: const EdgeInsets.all(32.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 80),
+                const SizedBox(height: 80),
                 Text(
                   'Your Email Address',
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
-                SizedBox(height: 8,),
+                const SizedBox(height: 8,),
                 Text(
                   'A 6 digit verification code will be sent to your \n e-mail address',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailTEController,
-                  decoration: InputDecoration(hintText: 'Email'),
+                  decoration: const InputDecoration(hintText: 'Email'),
                   validator: (String? value){
                     String email = value?.trim() ?? '' ;
                     if(EmailValidator.validate(email)=='false'){
@@ -59,25 +60,25 @@ class _ForgotPasswordVerifyEmailState extends State<ForgotPasswordVerifyEmail> {
                 ),
 
 
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 ElevatedButton(
                   onPressed: _onTapSubmitButton,
                   child: Icon(Icons.arrow_forward),
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
                 Center(
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black54,
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                       ),
                       children: [
-                        TextSpan(text: "Have an account?"),
+                        const TextSpan(text: "Have an account?"),
                         TextSpan(
                           text: "Sign In",
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.green,
                             fontWeight: FontWeight.bold,
                           ),

@@ -1,6 +1,6 @@
-# ui_design1
+# task_manager
 
-A new Flutter project.
+Flutter project for ostad batch nine live class
 
 ## Getting Started
 

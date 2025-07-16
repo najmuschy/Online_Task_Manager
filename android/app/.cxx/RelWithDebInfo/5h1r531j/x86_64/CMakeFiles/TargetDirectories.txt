@@ -1,0 +1,2 @@
+D:/dart_prac/ui_design1/android/app/.cxx/RelWithDebInfo/5h1r531j/x86_64/CMakeFiles/edit_cache.dir
+D:/dart_prac/ui_design1/android/app/.cxx/RelWithDebInfo/5h1r531j/x86_64/CMakeFiles/rebuild_cache.dir
