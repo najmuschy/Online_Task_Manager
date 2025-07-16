@@ -1,4 +1,4 @@
-# ostad_flutter_batch_nine
+# task_manager
 
 Flutter project for ostad batch nine live class
 

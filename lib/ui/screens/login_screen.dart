@@ -1,15 +1,18 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ostad_flutter_batch_nine/data/models/login_model.dart';
-import 'package:ostad_flutter_batch_nine/data/service/network_client.dart';
-import 'package:ostad_flutter_batch_nine/data/utils/urls.dart';
-import 'package:ostad_flutter_batch_nine/ui/controllers/auth_controller.dart';
-import 'package:ostad_flutter_batch_nine/ui/screens/forgot_password_verify_email_screen.dart';
-import 'package:ostad_flutter_batch_nine/ui/screens/main_bottom_nav_screen.dart';
-import 'package:ostad_flutter_batch_nine/ui/screens/register_screen.dart';
-import 'package:ostad_flutter_batch_nine/ui/widgets/centered_circular_progress_indicator.dart';
-import 'package:ostad_flutter_batch_nine/ui/widgets/screen_background.dart';
-import 'package:ostad_flutter_batch_nine/ui/widgets/snack_bar_message.dart';
+import 'package:get/get.dart';
+import 'package:task_manager/data/models/login_model.dart';
+import 'package:task_manager/data/service/network_client.dart';
+import 'package:task_manager/data/utils/urls.dart';
+import 'package:task_manager/ui/controller/login_controller.dart';
+import  'package:task_manager/ui/controller/auth_controller.dart' ;
+import 'package:task_manager/ui/screens/forgot_password_verify_email_screen.dart';
+import 'package:task_manager/ui/screens/main_bottom_nav_screen.dart';
+import 'package:task_manager/ui/screens/register_screen.dart';
+import 'package:task_manager/ui/widgets/centered_circular_progress_indicator.dart';
+import 'package:task_manager/ui/widgets/screen_background.dart';
+import 'package:task_manager/ui/widgets/snack_bar_message.dart';
+import 'package:task_manager/controller_binder.dart' ;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _loginInProgress = false;
+  final LoginController loginController = Get.find<LoginController>() ;
 
   // TODO: Validate form(Email & password)
   @override
@@ -59,13 +62,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Visibility(
-                  visible: _loginInProgress == false,
-                  replacement: const CenteredCircularProgressIndicator(),
-                  child: ElevatedButton(
-                    onPressed: _onTapSignInButton,
-                    child: const Icon(Icons.arrow_circle_right_outlined),
-                  ),
+                GetBuilder<LoginController>(
+                  builder: (controller){
+                    return Visibility(
+                      visible: loginController.loginInProgress == false,
+                      replacement: const CenteredCircularProgressIndicator(),
+                      child: ElevatedButton(
+                        onPressed: _onTapSignInButton,
+                        child: const Icon(Icons.arrow_circle_right_outlined),
+                      ),
+                    );
+                  },
+
                 ),
                 const SizedBox(height: 32),
                 Center(
@@ -114,31 +122,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _login() async {
-    _loginInProgress = true;
-    setState(() {});
-    Map<String, dynamic> requestBody = {
-      "email": _emailTEController.text.trim(),
-      "password": _passwordTEController.text
-    };
-    NetworkResponse response = await NetworkClient.postRequest(
-      url: Urls.loginUrl,
-      body: requestBody,
-    );
-    _loginInProgress = false;
-    setState(() {});
-    if (response.isSuccess) {
-      LoginModel loginModel = LoginModel.fromJson(response.data!);
-      AuthController.saveUserInformation(loginModel.token, loginModel.userModel);
 
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MainBottomNavScreen(),
-        ),
-            (predicate) => false,
-      );
-    } else {
-      showSnackBarMessage(context, response.errorMessage, true);
+    final bool isSuccess = await loginController.login(_emailTEController.text, _passwordTEController.text);
+
+    if (isSuccess) {
+
+      Get.offAll(const MainBottomNavScreen()) ;
+    }
+    else {
+      showSnackBarMessage(context, loginController.errorMessage, true);
     }
   }
 
@@ -152,12 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onTapSignUpButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const RegisterScreen(),
-      ),
-    );
+    Get.to(const RegisterScreen()) ;
   }
 
   @override

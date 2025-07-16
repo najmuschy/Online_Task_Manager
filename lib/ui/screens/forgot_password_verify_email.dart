@@ -6,7 +6,6 @@ import 'package:email_validator/email_validator.dart';
 
 import '../../data/service/network_client.dart';
 import '../../data/utils/urls.dart';
-import '../utils/assets_path.dart';
 import '../widgets/scaffold_message.dart';
 import '../widgets/screen_background.dart';
 import 'forgot_password_verify_pin.dart';

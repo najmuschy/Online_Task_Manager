@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ostad_flutter_batch_nine/ui/screens/login_screen.dart';
-import 'package:ostad_flutter_batch_nine/ui/screens/reset_password_screen.dart';
-import 'package:ostad_flutter_batch_nine/ui/widgets/screen_background.dart';
+import 'package:task_manager/ui/screens/login_screen.dart';
+import 'package:task_manager/ui/screens/reset_password_screen.dart';
+import 'package:task_manager/ui/widgets/screen_background.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class ForgotPasswordPinVerificationScreen extends StatefulWidget {

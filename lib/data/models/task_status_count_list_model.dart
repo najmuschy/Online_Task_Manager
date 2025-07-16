@@ -1,4 +1,4 @@
-import 'package:ostad_flutter_batch_nine/data/models/task_status_count_model.dart';
+import 'package:task_manager/data/models/task_status_count_model.dart';
 
 class TaskStatusCountListModel {
   late final String status;

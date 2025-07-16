@@ -1,4 +1,4 @@
-package com.ostad.ostad_flutter_batch_nine
+package com.ostad.task_manager
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="ostad_flutter_batch_nine"
+        android:label="task_manager"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

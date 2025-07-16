@@ -1,11 +1,11 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ostad_flutter_batch_nine/data/service/network_client.dart';
-import 'package:ostad_flutter_batch_nine/data/utils/urls.dart';
-import 'package:ostad_flutter_batch_nine/ui/widgets/centered_circular_progress_indicator.dart';
-import 'package:ostad_flutter_batch_nine/ui/widgets/screen_background.dart';
-import 'package:ostad_flutter_batch_nine/ui/widgets/snack_bar_message.dart';
+import 'package:task_manager/data/service/network_client.dart';
+import 'package:task_manager/data/utils/urls.dart';
+import 'package:task_manager/ui/widgets/centered_circular_progress_indicator.dart';
+import 'package:task_manager/ui/widgets/screen_background.dart';
+import 'package:task_manager/ui/widgets/snack_bar_message.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});

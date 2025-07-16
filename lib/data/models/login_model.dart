@@ -1,4 +1,4 @@
-import 'package:ostad_flutter_batch_nine/data/models/user_model.dart';
+import 'package:task_manager/data/models/user_model.dart';
 
 class LoginModel {
   late final String status;

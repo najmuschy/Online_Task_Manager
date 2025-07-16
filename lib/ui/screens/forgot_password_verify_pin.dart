@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ostad_flutter_batch_nine/ui/screens/reset_password.dart';
+import 'package:task_manager/ui/screens/reset_password.dart';
 import 'package:pin_code_fields/pin_code_fields.dart'
     show AnimationType, PinCodeFieldShape, PinCodeTextField, PinTheme;
 

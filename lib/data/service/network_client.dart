@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
-import 'package:ostad_flutter_batch_nine/app.dart';
-import 'package:ostad_flutter_batch_nine/ui/controllers/auth_controller.dart';
-import 'package:ostad_flutter_batch_nine/ui/screens/login_screen.dart';
+import 'package:task_manager/app.dart';
+import 'package:task_manager/ui/controller/auth_controller.dart';
+import 'package:task_manager/ui/screens/login_screen.dart';
 
 class NetworkResponse {
   final bool isSuccess;
@@ -131,7 +131,7 @@ class NetworkClient {
   }
 
   static Future<void> _moveToLoginScreen() async {
-    await AuthController.clearUserData();
+    await AuthController.clearUserInfo();
     Navigator.pushAndRemoveUntil(
         TaskManagerApp.navigatorKey.currentContext!,
         MaterialPageRoute(builder: (context) => const LoginScreen()),

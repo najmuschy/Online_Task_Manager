@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ostad_flutter_batch_nine/ui/screens/forgot_password_pin_verification_screen.dart';
-import 'package:ostad_flutter_batch_nine/ui/widgets/screen_background.dart';
+import 'package:task_manager/ui/screens/forgot_password_pin_verification_screen.dart';
+import 'package:task_manager/ui/widgets/screen_background.dart';
 
 class ForgotPasswordVerifyEmailScreen extends StatefulWidget {
   const ForgotPasswordVerifyEmailScreen({super.key});

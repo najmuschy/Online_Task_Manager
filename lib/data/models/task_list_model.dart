@@ -1,4 +1,4 @@
-import 'package:ostad_flutter_batch_nine/data/models/task_model.dart';
+import 'package:task_manager/data/models/task_model.dart';
 
 class TaskListModel {
   late final String status;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ostad_flutter_batch_nine/data/service/network_client.dart';
-import 'package:ostad_flutter_batch_nine/data/utils/urls.dart';
-import 'package:ostad_flutter_batch_nine/ui/widgets/centered_circular_progress_indicator.dart';
-import 'package:ostad_flutter_batch_nine/ui/widgets/screen_background.dart';
-import 'package:ostad_flutter_batch_nine/ui/widgets/snack_bar_message.dart';
-import 'package:ostad_flutter_batch_nine/ui/widgets/tm_app_bar.dart';
+import 'package:task_manager/data/service/network_client.dart';
+import 'package:task_manager/data/utils/urls.dart';
+import 'package:task_manager/ui/widgets/centered_circular_progress_indicator.dart';
+import 'package:task_manager/ui/widgets/screen_background.dart';
+import 'package:task_manager/ui/widgets/snack_bar_message.dart';
+import 'package:task_manager/ui/widgets/tm_app_bar.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({super.key});

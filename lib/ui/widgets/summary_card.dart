@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SummaryCard extends StatelessWidget {
+class SummaryCard extends StatefulWidget {
   const SummaryCard({
     super.key,
     required this.title,
@@ -11,6 +11,11 @@ class SummaryCard extends StatelessWidget {
   final int count;
 
   @override
+  State<SummaryCard> createState() => _SummaryCardState();
+}
+
+class _SummaryCardState extends State<SummaryCard> {
+  @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
@@ -20,10 +25,10 @@ class SummaryCard extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              '$count',
+              '${widget.count}',
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
-            Text(title),
+            Text(widget.title),
           ],
         ),
       ),
