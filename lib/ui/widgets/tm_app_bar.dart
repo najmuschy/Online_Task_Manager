@@ -76,18 +76,14 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   void _onTapProfileSection(BuildContext context) {
-    Navigator.push(context,
-      MaterialPageRoute(builder: (context) => const UpdateProfileScreen(),),);
+    Get.to(const UpdateProfileScreen());
+
   }
+
 
   Future<void> _onTapLogOutButton(BuildContext context) async {
     await AuthController.clearUserInfo();
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const LoginScreen(),
-        ),
-        (predicate) => false);
+    Get.offAll(const LoginScreen());
   }
 
   @override

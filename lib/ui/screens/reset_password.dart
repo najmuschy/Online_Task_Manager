@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../data/service/network_client.dart';
 import '../../data/utils/urls.dart';
@@ -128,11 +129,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     };
     NetworkResponse response = await NetworkClient.postRequest(url: Urls.resetPassword, body: requestBody) ;
     if(response.isSuccess){
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
-            (predicate) => false,
-      );
+      Get.offAll(const LoginScreen());
+
       showScaffoldMessage(context, response.data!['data']);
     }
     else{
@@ -147,11 +145,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   }
   void _onTapSignInButton() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-      (predicate) => false,
-    );
+    Get.offAll(const LoginScreen()) ;
   }
 
   @override

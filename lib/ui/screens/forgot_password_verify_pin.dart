@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_manager/ui/screens/reset_password.dart';
 import 'package:pin_code_fields/pin_code_fields.dart'
     show AnimationType, PinCodeFieldShape, PinCodeTextField, PinTheme;
@@ -119,10 +120,7 @@ class _ForgotPasswordVerifyPinState extends State<ForgotPasswordVerifyPin> {
 
     NetworkResponse response = await NetworkClient.getRequest(url: Urls.forgotPasswordEmailVerifyPin (email, _pinCodeTEController.text)) ;
     if(response.isSuccess){
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ResetPasswordScreen(email: email, otp : _pinCodeTEController.text )),
-      );
+      Get.to(ResetPasswordScreen(email: email, otp: _pinCodeTEController.text)) ;
       showScaffoldMessage(context, '${response.data!['data']} Enter a 6 digit password') ;
     }
     else{
@@ -132,11 +130,7 @@ class _ForgotPasswordVerifyPinState extends State<ForgotPasswordVerifyPin> {
   }
 
   void _onTapSignInButton() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-      (pre) => false,
-    );
+    Get.offAll(const LoginScreen());
   }
 
   void _onTapForgotPasswordButton() {}

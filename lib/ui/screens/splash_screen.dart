@@ -5,6 +5,7 @@ import 'package:task_manager/ui/screens/login_screen.dart';
 import 'package:task_manager/ui/screens/main_bottom_nav_screen.dart';
 import 'package:task_manager/ui/utils/assets_path.dart';
 import 'package:task_manager/ui/widgets/screen_background.dart';
+import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,18 +21,13 @@ class _SplashScreenState extends State<SplashScreen> {
     _moveToNextScreen();
   }
 
+
+
   Future<void> _moveToNextScreen() async {
     await Future.delayed(const Duration(seconds: 2));
 
     final bool isLoggedIn = await AuthController.confirmUserLoggedIn();
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            isLoggedIn ? const MainBottomNavScreen() : const LoginScreen(),
-      ),
-    );
+     Get.offAll(isLoggedIn ? const MainBottomNavScreen(): const LoginScreen()) ;
   }
 
   @override

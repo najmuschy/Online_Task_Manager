@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:task_manager/app.dart';
 import 'package:task_manager/ui/controller/auth_controller.dart';
@@ -31,7 +32,7 @@ class NetworkClient {
         'token': AuthController.token ?? '',
       };
       _preRequestLog(url, headers);
-      Response response = await get(uri, headers: headers);
+      http.Response response = await http.get(uri, headers: headers);
       _postRequestLog(url, response.statusCode,
           headers: response.headers, responseBody: response.body);
       if (response.statusCode == 200) {
@@ -71,7 +72,7 @@ class NetworkClient {
         'token': AuthController.token ?? '',
       };
       _preRequestLog(url, headers, body: body);
-      Response response = await post(
+      http.Response response = await http.post(
         uri,
         headers: headers,
         body: jsonEncode(body),
@@ -132,9 +133,10 @@ class NetworkClient {
 
   static Future<void> _moveToLoginScreen() async {
     await AuthController.clearUserInfo();
-    Navigator.pushAndRemoveUntil(
-        TaskManagerApp.navigatorKey.currentContext!,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-        (predicate) => false);
+    Get.offAll(const LoginScreen());
+    // Navigator.pushAndRemoveUntil(
+    //     TaskManagerApp.navigatorKey.currentContext!,
+    //     MaterialPageRoute(builder: (context) => const LoginScreen()),
+    //     (predicate) => false);
   }
 }

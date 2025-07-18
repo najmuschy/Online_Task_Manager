@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:email_validator/email_validator.dart';
+import 'package:get/get.dart';
 
 
 import '../../data/service/network_client.dart';
@@ -63,7 +64,7 @@ class _ForgotPasswordVerifyEmailState extends State<ForgotPasswordVerifyEmail> {
                 const SizedBox(height: 12),
                 ElevatedButton(
                   onPressed: _onTapSubmitButton,
-                  child: Icon(Icons.arrow_forward),
+                  child: const Icon(Icons.arrow_forward),
                 ),
                 const SizedBox(height: 32),
                 Center(
@@ -104,7 +105,7 @@ class _ForgotPasswordVerifyEmailState extends State<ForgotPasswordVerifyEmail> {
 
     if(response.isSuccess){
       showScaffoldMessage(context, response.data!["data"]) ;
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPasswordVerifyPin(email : _emailTEController.text))) ;
+      Get.to( ForgotPasswordVerifyPin(email: _emailTEController.text));
     }
     else{
       showScaffoldMessage(context, response.data!["data"], true);
@@ -119,7 +120,7 @@ class _ForgotPasswordVerifyEmailState extends State<ForgotPasswordVerifyEmail> {
 
   }
   void _onTapSignInButton() {
-   Navigator.pop(context) ;
+   Get.back() ;
   }
  @override
   void dispose() {

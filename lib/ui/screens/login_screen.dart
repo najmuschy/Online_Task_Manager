@@ -6,7 +6,7 @@ import 'package:task_manager/data/service/network_client.dart';
 import 'package:task_manager/data/utils/urls.dart';
 import 'package:task_manager/ui/controller/login_controller.dart';
 import  'package:task_manager/ui/controller/auth_controller.dart' ;
-import 'package:task_manager/ui/screens/forgot_password_verify_email_screen.dart';
+import 'package:task_manager/ui/screens/forgot_password_verify_email.dart';
 import 'package:task_manager/ui/screens/main_bottom_nav_screen.dart';
 import 'package:task_manager/ui/screens/register_screen.dart';
 import 'package:task_manager/ui/widgets/centered_circular_progress_indicator.dart';
@@ -135,12 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onTapForgotPasswordButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ForgotPasswordVerifyEmailScreen(),
-      ),
-    );
+    Get.to(const ForgotPasswordVerifyEmail()) ;
   }
 
   void _onTapSignUpButton() {
